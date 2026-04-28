@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://crsubt55gephh"]
+
+[ext_resource type="Script" uid="uid://bddxem8mbba8g" path="res://fruit.gd" id="1_dajs1"]
+[ext_resource type="Texture2D" uid="uid://bnfsv0k7adh7n" path="res://fruit.png" id="2_t45jj"]
+[ext_resource type="Texture2D" uid="uid://gm1hgoymmiqq" path="res://fruits/fruits.png" id="3_nxb4p"]
+[ext_resource type="Texture2D" uid="uid://bcuof5kj3l7ih" path="res://fruits/fruits copy 3.png" id="4_tndcw"]
+[ext_resource type="Texture2D" uid="uid://py7q66c24syl" path="res://fruits/fruits copy 4.png" id="5_b1rm4"]
+[ext_resource type="Texture2D" uid="uid://dfwknkwygtcrj" path="res://fruits/fruits copy 7.png" id="6_r2dwb"]
+[ext_resource type="Texture2D" uid="uid://d0ap01utr8g0r" path="res://fruits/fruits copy 6.png" id="7_cy5uh"]
+[ext_resource type="Texture2D" uid="uid://u7vdh4kbulq4" path="res://fruits/fruits copy 5.png" id="8_7fngh"]
+[ext_resource type="Texture2D" uid="uid://bnacg14f3d8yx" path="res://fruits/fruits copy 2.png" id="9_h3qbx"]
+[ext_resource type="Texture2D" uid="uid://ce0mn2crq5jjt" path="res://fruits/fruits copy.png" id="10_2a7r2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_t45jj"]
+bounce = 0.01
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t45jj"]
+radius = 9.055386
+
+[node name="fruit" type="RigidBody2D" unique_id=808647571 groups=["fruit"]]
+collision_layer = 3
+physics_material_override = SubResource("PhysicsMaterial_t45jj")
+gravity_scale = 3.825
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 20
+script = ExtResource("1_dajs1")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1828230299]
+scale = Vector2(0.17333335, 0.17333332)
+texture = ExtResource("2_t45jj")
+
+[node name="Fruits1" type="Sprite2D" parent="Visual" unique_id=1701959571]
+position = Vector2(5.7692275, 17.307703)
+scale = Vector2(0.9783095, 0.9783098)
+texture = ExtResource("3_nxb4p")
+
+[node name="Fruits2" type="Sprite2D" parent="Visual" unique_id=295034346]
+visible = false
+position = Vector2(0.07965469, 10.644508)
+scale = Vector2(0.8285212, 0.82852155)
+texture = ExtResource("4_tndcw")
+
+[node name="Fruits3" type="Sprite2D" parent="Visual" unique_id=1349530371]
+visible = false
+position = Vector2(0.12654501, 5.5456095)
+scale = Vector2(0.78417224, 0.7841725)
+texture = ExtResource("5_b1rm4")
+
+[node name="Fruits4" type="Sprite2D" parent="Visual" unique_id=1372935424]
+visible = false
+position = Vector2(-7.6293945e-06, -3.8146973e-06)
+scale = Vector2(0.48915476, 0.4891549)
+texture = ExtResource("6_r2dwb")
+
+[node name="Fruits5" type="Sprite2D" parent="Visual" unique_id=1671659322]
+visible = false
+position = Vector2(5.7692413, 0)
+scale = Vector2(0.66051805, 0.6605183)
+texture = ExtResource("7_cy5uh")
+
+[node name="Fruits6" type="Sprite2D" parent="Visual" unique_id=1847273605]
+visible = false
+position = Vector2(3.9407234, -3.8427048)
+scale = Vector2(0.648943, 0.6489432)
+texture = ExtResource("8_7fngh")
+
+[node name="Fruits7" type="Sprite2D" parent="Visual" unique_id=420964892]
+visible = false
+position = Vector2(3.0362473, 2.637535)
+scale = Vector2(0.36732695, 0.3673271)
+texture = ExtResource("9_h3qbx")
+
+[node name="Fruits8" type="Sprite2D" parent="Visual" unique_id=566036453]
+visible = false
+position = Vector2(-5.7692304, 5.7692313)
+scale = Vector2(0.84263515, 0.8426354)
+texture = ExtResource("10_2a7r2")
+
+[node name="Polygon2D" type="CollisionPolygon2D" parent="." unique_id=1832067838]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1845880582]
+visible = false
+shape = SubResource("CircleShape2D_t45jj")
+disabled = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

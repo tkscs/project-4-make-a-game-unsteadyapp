@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://uhi2igt6rsao"]
+
+[ext_resource type="Script" uid="uid://mow5vlqi4ed4" path="res://container.gd" id="1_d0xxp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_d0xxp"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_2c6x0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2c6x0"]
+size = Vector2(1139.375, 45)
+
+[node name="container" type="StaticBody2D" unique_id=130334855]
+collision_layer = 5
+physics_material_override = SubResource("PhysicsMaterial_d0xxp")
+script = ExtResource("1_d0xxp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=332894620]
+material = SubResource("CanvasItemMaterial_2c6x0")
+position = Vector2(572, 630)
+shape = SubResource("RectangleShape2D_2c6x0")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CollisionShape2D" unique_id=125459380]
+offset_left = -575.0
+offset_top = -23.0
+offset_right = 571.0
+offset_bottom = 22.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="." unique_id=210715508]
+material = SubResource("CanvasItemMaterial_2c6x0")
+position = Vector2(21, 81)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_2c6x0")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CollisionShape2D4" unique_id=1757464309]
+offset_left = -575.0
+offset_top = -23.0
+offset_right = 571.0
+offset_bottom = 22.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="." unique_id=1344623667]
+material = SubResource("CanvasItemMaterial_2c6x0")
+position = Vector2(1142, 81)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_2c6x0")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CollisionShape2D5" unique_id=902278397]
+offset_left = -575.0
+offset_top = -23.0
+offset_right = 571.0
+offset_bottom = 22.0
+metadata/_edit_use_anchors_ = true
+
+[node name="clamp" type="Node2D" parent="." unique_id=19330255]
+position = Vector2(93, -496)
+
+[node name="clamp2" type="Node2D" parent="." unique_id=535626925]
+position = Vector2(1068, -495)

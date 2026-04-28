@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cswbd351oo4uc"]
+
+[ext_resource type="Script" uid="uid://e2vvdw1bls72" path="res://hud.gd" id="1_37p78"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_37p78"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_64ctp"]
+events = [SubResource("InputEventKey_37p78")]
+
+[node name="HUD" type="CanvasLayer" unique_id=2004284597]
+script = ExtResource("1_37p78")
+
+[node name="Score" type="Label" parent="." unique_id=1869400736]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -262.0
+offset_top = -35.0
+offset_right = 233.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.009983954, 0.0076186024, 0, 1)
+text = "Hello
+"
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="." unique_id=110076555]
+offset_left = 1006.0
+offset_top = 1073.0
+offset_right = 1154.0
+offset_bottom = 1151.0
+shortcut = SubResource("Shortcut_64ctp")
+text = "Back to Main (Esc)"
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

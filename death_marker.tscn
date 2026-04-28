@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://2gnl4v5xcah3"]
+
+[ext_resource type="Script" uid="uid://ca5e0t7316g03" path="res://death_marker.gd" id="1_cntov"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ylwmo"]
+size = Vector2(1174, 20)
+
+[node name="deathMarker" type="Area2D" unique_id=463016422]
+collision_mask = 2
+script = ExtResource("1_cntov")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1616372568]
+position = Vector2(577, 0)
+shape = SubResource("RectangleShape2D_ylwmo")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2017753667]
+offset_left = 5.0
+offset_top = -9.0
+offset_right = 1151.0
+offset_bottom = 13.0
+color = Color(1, 0, 0, 0.34901962)

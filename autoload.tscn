@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://3dkl8d8khh4"]
+
+[ext_resource type="Script" uid="uid://eph1dpfk4sxp" path="res://autoload.gd" id="1_bphty"]
+
+[node name="Autoload" type="Node" unique_id=1607492754]
+script = ExtResource("1_bphty")
+
+[connection signal="gameOver" from="." to="." method="_on_game_over"]

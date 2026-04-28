@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://d2c47efc12hd8"]
+
+[ext_resource type="Script" uid="uid://8h4oshh8b32l" path="res://dropper.gd" id="1_6csci"]
+[ext_resource type="PackedScene" uid="uid://crsubt55gephh" path="res://fruit.tscn" id="2_onh84"]
+[ext_resource type="Texture2D" uid="uid://bnfsv0k7adh7n" path="res://fruit.png" id="3_rn7fu"]
+
+[node name="dropper" type="Node2D" unique_id=1716786120]
+script = ExtResource("1_6csci")
+fruit_scence = ExtResource("2_onh84")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1835208357]
+scale = Vector2(0.17333335, 0.17333332)
+texture = ExtResource("3_rn7fu")
