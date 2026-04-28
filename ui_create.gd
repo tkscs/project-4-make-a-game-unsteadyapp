@@ -1,5 +1,5 @@
 extends Node2D
-
+var allCollisionObj = []
 var drawing = false
 var polygon = []
 # Called when the node enters the scene tree for the first time.
@@ -11,9 +11,18 @@ func stateChange():
 		show()
 	else:
 		hide()
+var timerReset = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(Input.is_action_just_pressed("click") and Autoload.state == "create"):
+		if($S/Reset.button_pressed == true):
+			timerReset += delta
+			if(timerReset > 2):
+				for i in allCollisionObj:
+					i.queue_free()
+		else:
+			timerReset  = 0
+			
 		if(drawing):
 			var mousePos = get_viewport().get_mouse_position()
 			polygon.append(mousePos)
@@ -50,6 +59,7 @@ func _on_button_pressed() -> void:
 				polygonIs.polygon = polygon
 				collisionShape.polygon = polygon
 				polygon = []
+				allCollisionObj.append(staticBody)
 				Autoload.spawn.emit(staticBody)
 				queue_redraw()
 				#queue_redraw()
@@ -84,3 +94,7 @@ func _on_time_drag_ended(value_changed: bool) -> void:
 
 func _on_gravity_slider_drag_ended(value_changed: bool) -> void:
 	Autoload.gravity = $S/GravitySlider.value
+
+
+func _on_base_size_drag_ended(value_changed: bool) -> void:
+	Autoload.ogsize = $S/BaseSize.value

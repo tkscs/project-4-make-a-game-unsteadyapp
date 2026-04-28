@@ -6,7 +6,7 @@ signal stateChange
 var allCircle = true
 var state = "main"
 signal gameOver
-var gravity =1
+var gravity = 2
 var maxSpawnRate:float = 0.4
 var clamps = [Vector2(0,0),Vector2(0,0)]
 # Called when the node enters the scene tree for the first time.

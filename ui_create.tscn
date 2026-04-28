@@ -137,18 +137,18 @@ text = "Delay between placing
 If set to zero, it will count number of inputs instead"
 autowrap_mode = 3
 
-[node name="SpawnTime" type="HSlider" parent="S" unique_id=115038837]
+[node name="BaseSize" type="HSlider" parent="S" unique_id=115038837]
 offset_left = 931.0
 offset_top = 185.0
 offset_right = 1121.0
 offset_bottom = 201.0
-min_value = 1.0
+min_value = 0.001
 max_value = 10.0
-step = 0.01
-value = 1.0
+step = 0.001
+value = 1.001
 tick_count = 10
 
-[node name="Time" type="Label" parent="S/SpawnTime" unique_id=1861163026]
+[node name="Time" type="Label" parent="S/BaseSize" unique_id=1861163026]
 layout_mode = 0
 offset_left = -8.0
 offset_top = -33.0
@@ -177,9 +177,16 @@ offset_bottom = 126.0
 text = "gravity"
 autowrap_mode = 3
 
+[node name="Reset" type="Button" parent="S" unique_id=639096421]
+offset_left = 9.0
+offset_top = 501.0
+offset_right = 202.0
+offset_bottom = 574.0
+text = "Reset All Polygons(hold)"
+
 [connection signal="pressed" from="add polygon" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="drag_ended" from="S/Time" to="." method="_on_time_drag_ended"]
-[connection signal="drag_ended" from="S/SpawnTime" to="." method="_on_time_drag_ended"]
+[connection signal="drag_ended" from="S/BaseSize" to="." method="_on_base_size_drag_ended"]
 [connection signal="drag_ended" from="S/GravitySlider" to="." method="_on_gravity_slider_drag_ended"]
