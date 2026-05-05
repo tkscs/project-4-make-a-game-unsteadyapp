@@ -26,7 +26,7 @@ static func areaOfAirregularPolygon(polygon) -> float:
 	var arrayOfTriIndices = Geometry2D.triangulate_polygon(polygon)
 	var triangeAreas = []
 	var totalArea = 0
-	print(arrayOfTriIndices.size())
+	@warning_ignore("integer_division")
 	for i in range(arrayOfTriIndices.size()/3):
 		var xone = polygon[arrayOfTriIndices[i*3]][0]
 		var xtwo = polygon[arrayOfTriIndices[i*3+1]][0]
@@ -43,10 +43,8 @@ static func areaOfAirregularPolygon(polygon) -> float:
 	return totalArea
 static func resize(body,level:int,onlyVisual:bool = false):
 	var visual = body.get_child(0) as Sprite2D
-	print("level: "+ str(level))
 	var scaleTo = levelToSize(level)
 	visual.scale = Vector2(0.187*floor(scaleTo),0.187*floor(scaleTo))
-	print(scaleTo)
 	visual.self_modulate = Color.from_hsv(float(floor(scaleTo))/10,1,1)
 	var diffrentCostumes = visual.get_children() as Array[Sprite2D]
 	for i in range(diffrentCostumes.size()):
@@ -58,17 +56,12 @@ static func resize(body,level:int,onlyVisual:bool = false):
 		#body.get_child(1).scale = Vector2(floor(scaleTo),floor(scaleTo))
 		var ogChild = body.get_child(0) as Sprite2D
 		var childref = ogChild.get_child(level%ogChild.get_children().size()) as Sprite2D
-		print(level)
 		var texture = childref.texture.get_image()
 		var bm = BitMap.new()
 		bm.create_from_image_alpha(texture)
-		print("size:" + str(bm.opaque_to_polygons(Rect2(Vector2.ZERO,bm.get_size())).size()))
 		var Poly = bm.opaque_to_polygons(Rect2(Vector2.ZERO,bm.get_size()),10)[0] as PackedVector2Array
 		Poly = fruitExtra.offsetPackedVector2Array(Poly,-texture.get_size()/2)
-		print("area: " + str(fruitExtra.areaOfAirregularPolygon(Poly)))
-		print("perimiter: " + str(fruitExtra.permOfApolygon(Poly)))
 		var Q = similarityToCircle(Poly)
-		print("Q: " + str(Q))
 		var collisionRef
 		if(Q > 0.9 or (Autoload.allCircle == true and not (level == 2 or level == 3) )):
 			body.get_child(1).queue_free()
@@ -81,7 +74,6 @@ static func resize(body,level:int,onlyVisual:bool = false):
 			body.call_deferred("move_child",circleColl,1)
 			collisionRef = circleColl
 			#collisionRef.scale = scaleTo
-			print("made")
 		else:
 			body.get_child(1).queue_free()
 			collisionRef = CollisionPolygon2D.new()
@@ -90,7 +82,51 @@ static func resize(body,level:int,onlyVisual:bool = false):
 			body.call_deferred("move_child",collisionRef,1)
 			collisionRef.global_scale = childref.global_scale
 		#$Polygon2D.polygon = Geometry2D.merge_polygons(bm.opaque_to_polygons(Rect2(Vector2.ZERO,bm.get_size())))
-	return level+1
+	return level + 1
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+static func addNewPoly(polygon,bounce,friction,collisionEvent):
+	if(polygon.size() > 1):
+		var staticBody
+		var polygonIs
+		if(collisionEvent == "bp"):
+			staticBody = preload("res://bouncepad.tscn").instantiate()
+			polygonIs = staticBody.get_child(1) as Polygon2D
+		elif(collisionEvent == "fan"):
+			staticBody = preload("res://bouncepad.tscn").instantiate()
+			polygonIs = staticBody.get_child(1) as Polygon2D
+			staticBody.mode = "fan"
+		else:
+			staticBody = preload("res://obstacle.tscn").instantiate()
+			polygonIs = staticBody.get_child(1) as Polygon2D
+			var line = polygonIs.get_child(0) as Line2D
+			line.modulate = Color.from_hsv(bounce,friction,1)
+			var physicsMaterialForObj = PhysicsMaterial.new()
+			physicsMaterialForObj.bounce = bounce
+			physicsMaterialForObj.friction = friction
+			physicsMaterialForObj.rough = true
+			staticBody.physics_material_override = physicsMaterialForObj
+		var collisionShape = staticBody.get_child(0) as CollisionPolygon2D
+		var newOBJ = obj.new()
+		if(collisionEvent == "killzone"):
+			polygonIs.color = Color(0.984, 0.055, 0.0, 1.0)
+			staticBody.add_to_group("kill")
+		elif(collisionEvent == "winzone"):
+			polygonIs.color = Color(0.0, 0.718, 0.194, 1.0)
+			staticBody.add_to_group("win")
+		newOBJ.polyPoinnts = polygon
+		polygonIs.polygon = polygon
+		collisionShape.polygon = polygon
+		Autoload.spawn.emit(staticBody)
+		return [staticBody,{"polygon":polygon,"bounce":bounce,"friction":friction,"collisionEvent":collisionEvent}]
+static func isSimple(polygon):
+	for i in range(polygon.size()-1):
+		var p1 = polygon[i%polygon.size()]
+		var p2 = polygon[(i+1)%polygon.size()]
+		for j in range(polygon.size()-1):
+			var p1a = polygon[j%polygon.size()]
+			var p2a = polygon[(j+1)%polygon.size()]
+			if(p1 != p1a and p2 != p2a and p1 != p2a and p2 != p1a):
+				var intersect = Geometry2D.segment_intersects_segment(p1,p2,p1a,p2a)
+				if intersect != null:
+					return false
+	return true

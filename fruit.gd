@@ -1,11 +1,11 @@
 extends RigidBody2D
 
-var BaseSize:int
+#var BaseSize:int
 var fruitLevel = 1
 #(4piA)/(p^2)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	fruitLevel = fruitExtra.resize(self,fruitLevel)
+	fruitLevel = fruitExtra.resize(self,fruitLevel,false)
 	gravity_scale = Autoload.gravity
 	#var childref = $Visual.get_child(fruitLevel) as Sprite2D
 	#var texture = childref.texture.get_image()
@@ -31,51 +31,56 @@ func _ready() -> void:
 		#collisionRef = circleColl
 		#print("made")
 	#else:
-		#collisionRef = $Polygon2D
+		#collisionRef = $Polygon2Df
 		#collisionRef.polygon = Poly
 	##$Polygon2D.polygon = Geometry2D.merge_polygons(bm.opaque_to_polygons(Rect2(Vector2.ZERO,bm.get_size())))
 	#collisionRef.global_scale = childref.global_scale
 	#$Polygon2D.position =  childref.position
-	
-	print(get_children())
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	#print($Polygon2D.global_position == childref.global_position)
-
 
 func _on_body_entered(body: Node) -> void:
 	checkForMerges(self,body)
 	if(body.is_in_group("kill")):
 		Autoload.gameOver.emit()
+	elif(body.is_in_group("win")):
+		Autoload.gameOver.emit()
+		Autoload.win.emit()
+func checkWin(body):
+	var newExp = Expression.new()
+	newExp.parse(Autoload.expressionToWin,["score","fruitLevel"])
+	var result = newExp.execute([Autoload.score,body.fruitLevel])
+	if(newExp.has_execute_failed()):
+		print("Error")
+	else:
+		if(typeof(result) == TYPE_BOOL):
+			if(result):
+				Autoload.gameOver.emit()
+				Autoload.win.emit()
+		else:
+			print("error")
 func checkForMerges(origin:Node,body: Node) -> void:
 	if(body.is_in_group("fruit") and origin.is_in_group("fruit")):
-		var collisionShapeOther = body.get_child(1)
-		#var othervisual = body.get_child(0)
-		var selfCollision = origin.get_child(1)
-		#var selfvisual = origin.get_child(0)
+		#var collisionShapeOther = body.get_child(1)
+		##var othervisual = body.get_child(0)
+		#var selfCollision = origin.get_child(1)
+		##var selfvisual = origin.get_child(0)
 		if(body.fruitLevel == origin.fruitLevel):
 			if(origin.is_queued_for_deletion() == false and body.is_queued_for_deletion() == false):
 				#if(origin.linear_velocity>body.linear_velocity):
 				if(origin.global_position.y < body.global_position.y):
-					print("queue other for del")
-					origin.fruitLevel = fruitExtra.resize(origin,origin.fruitLevel,false)
-					Autoload.score+= selfCollision.scale.x
+					origin.fruitLevel = fruitExtra.resize(origin,origin.fruitLevel)
+					Autoload.score += origin.fruitLevel
 					var collidedbodies = origin.get_colliding_bodies()
 					for i in collidedbodies:
 						checkForMerges(self,i)
-					origin.linear_velocity =  Vector2.ZERO
+					origin.linear_velocity = Vector2.ZERO
 					body.queue_free()
-				elif(linear_velocity==body.linear_velocity):
-					print("hello")
+					checkWin(origin)
 				else:
-					print("queue self for deletion")
 					body.fruitLevel = fruitExtra.resize(body,body.fruitLevel)
-					Autoload.score+=collisionShapeOther.scale.x
+					Autoload.score+=body.fruitLevel
 					body.linear_velocity = Vector2.ZERO
 					var collidedbodies = body.get_colliding_bodies()
 					for i in collidedbodies:
 						checkForMerges(body,i)
+					checkWin(body)
 					origin.queue_free()
-			else:
-				print("already gonna be qued for deletion")

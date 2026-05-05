@@ -4,7 +4,7 @@ var LineColor: Color
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$poly/Line.points = $poly.polygon + PackedVector2Array([$poly.polygon[0]])
-	
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

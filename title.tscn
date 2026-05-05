@@ -16,6 +16,17 @@ grow_horizontal = 2
 text = "Merge Game!"
 horizontal_alignment = 1
 
+[node name="Win" type="Label" parent="." unique_id=900530201]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -345.0
+offset_top = 160.0
+offset_right = 343.0
+offset_bottom = 309.0
+grow_horizontal = 2
+horizontal_alignment = 1
+
 [node name="Play" type="Button" parent="." unique_id=1054057548]
 anchors_preset = 8
 anchor_left = 0.5

@@ -1,5 +1,6 @@
 extends Node2D
-
+#TODO: Add drag drop
+#TODO: Support for polygons that interscect self
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -9,6 +10,7 @@ func _ready() -> void:
 
 func add_children(child):
 	add_child(child)
+	move_child(child,0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

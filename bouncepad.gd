@@ -19,7 +19,6 @@ func _physics_process(delta: float) -> void:
 			if(i.is_in_group("fruit")):
 				var fruitRef = i as RigidBody2D
 				fruitRef.apply_force(Vector2(0,-10000))
-				print(i)
 func _on_body_entered(body: Node2D) -> void:
 	if(mode == "bp" and body.is_in_group("fruit")):
-		body.linear_velocity = Vector2(0,-1000)
+		body.linear_velocity.y =-1000
