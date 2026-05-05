@@ -5,7 +5,7 @@ var fruitLevel = 1
 #(4piA)/(p^2)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	fruitLevel = fruitExtra.resize(self,fruitLevel,false)
+	fruitLevel = fruitExtra.resize(self,fruitLevel - 1,false)
 	gravity_scale = Autoload.gravity
 	#var childref = $Visual.get_child(fruitLevel) as Sprite2D
 	#var texture = childref.texture.get_image()

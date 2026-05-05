@@ -11,7 +11,7 @@ func getnextfruit():
 	var rndm = RandomNumberGenerator.new()
 	var weighted = PackedFloat32Array([100,50,25,12,6,3])
 	var toTry = rndm.rand_weighted(weighted)
-	levelOfFruit = toTry - 1
+	levelOfFruit = toTry
 	var futuresize = Autoload.ogsize
 	for i in randi_range(1,toTry):
 		futuresize = fruitExtra.sizeAlg(futuresize)
@@ -32,7 +32,6 @@ func _process(delta: float) -> void:
 		if(Autoload.maxSpawnRate > 0):
 			if(Input.is_action_pressed("click") and cooldown < 0):
 				spawnFruit()
-		
 func spawnFruit():
 	var fruitIns = fruit_scence.instantiate()
 	#fruitIns.scale = Vector2(2,2)

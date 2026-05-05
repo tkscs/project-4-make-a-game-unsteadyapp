@@ -3,6 +3,14 @@
 [ext_resource type="Script" uid="uid://8h4oshh8b32l" path="res://dropper.gd" id="1_6csci"]
 [ext_resource type="PackedScene" uid="uid://crsubt55gephh" path="res://fruit.tscn" id="2_onh84"]
 [ext_resource type="Texture2D" uid="uid://bnfsv0k7adh7n" path="res://fruit.png" id="3_rn7fu"]
+[ext_resource type="Texture2D" uid="uid://gm1hgoymmiqq" path="res://fruits/fruits.png" id="4_xviif"]
+[ext_resource type="Texture2D" uid="uid://bcuof5kj3l7ih" path="res://fruits/fruits copy 3.png" id="5_poryr"]
+[ext_resource type="Texture2D" uid="uid://py7q66c24syl" path="res://fruits/fruits copy 4.png" id="6_d1e62"]
+[ext_resource type="Texture2D" uid="uid://dfwknkwygtcrj" path="res://fruits/fruits copy 7.png" id="7_rjkfu"]
+[ext_resource type="Texture2D" uid="uid://d0ap01utr8g0r" path="res://fruits/fruits copy 6.png" id="8_jpeha"]
+[ext_resource type="Texture2D" uid="uid://u7vdh4kbulq4" path="res://fruits/fruits copy 5.png" id="9_wu1og"]
+[ext_resource type="Texture2D" uid="uid://bnacg14f3d8yx" path="res://fruits/fruits copy 2.png" id="10_boljg"]
+[ext_resource type="Texture2D" uid="uid://ce0mn2crq5jjt" path="res://fruits/fruits copy.png" id="11_8i5o1"]
 
 [node name="dropper" type="Node2D" unique_id=1716786120]
 script = ExtResource("1_6csci")
@@ -11,3 +19,50 @@ fruit_scence = ExtResource("2_onh84")
 [node name="Visual" type="Sprite2D" parent="." unique_id=1835208357]
 scale = Vector2(0.17333335, 0.17333332)
 texture = ExtResource("3_rn7fu")
+
+[node name="Fruits1" type="Sprite2D" parent="Visual" unique_id=758872193]
+position = Vector2(5.7692275, 17.307703)
+scale = Vector2(0.9783095, 0.9783098)
+texture = ExtResource("4_xviif")
+
+[node name="Fruits2" type="Sprite2D" parent="Visual" unique_id=2146616728]
+visible = false
+position = Vector2(0.07965469, 10.644508)
+scale = Vector2(0.8285212, 0.82852155)
+texture = ExtResource("5_poryr")
+
+[node name="Fruits3" type="Sprite2D" parent="Visual" unique_id=650900709]
+visible = false
+position = Vector2(0.12654501, 5.5456095)
+scale = Vector2(0.78417224, 0.7841725)
+texture = ExtResource("6_d1e62")
+
+[node name="Fruits4" type="Sprite2D" parent="Visual" unique_id=339602025]
+visible = false
+position = Vector2(-7.6293945e-06, -3.8146973e-06)
+scale = Vector2(0.48915476, 0.4891549)
+texture = ExtResource("7_rjkfu")
+
+[node name="Fruits5" type="Sprite2D" parent="Visual" unique_id=1152157043]
+visible = false
+position = Vector2(5.7692413, 0)
+scale = Vector2(0.66051805, 0.6605183)
+texture = ExtResource("8_jpeha")
+
+[node name="Fruits6" type="Sprite2D" parent="Visual" unique_id=502618316]
+visible = false
+position = Vector2(3.9407234, -3.8427048)
+scale = Vector2(0.648943, 0.6489432)
+texture = ExtResource("9_wu1og")
+
+[node name="Fruits7" type="Sprite2D" parent="Visual" unique_id=2122787933]
+visible = false
+position = Vector2(3.0362473, 2.637535)
+scale = Vector2(0.36732695, 0.3673271)
+texture = ExtResource("10_boljg")
+
+[node name="Fruits8" type="Sprite2D" parent="Visual" unique_id=878911244]
+visible = false
+position = Vector2(-5.7692304, 5.7692313)
+scale = Vector2(0.84263515, 0.8426354)
+texture = ExtResource("11_8i5o1")
