@@ -56,8 +56,10 @@ grow_vertical = 0
 text = "Create"
 
 [node name="Campaign" type="Button" parent="." unique_id=903584948]
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = 328.0
+offset_top = 258.0
+offset_right = 838.45166
+offset_bottom = 442.0
 text = "Campaign"
 
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]

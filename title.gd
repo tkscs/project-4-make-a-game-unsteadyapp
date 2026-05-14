@@ -24,5 +24,7 @@ func win():
 
 
 func _on_campaign_pressed() -> void:
+	fruitExtra.loadFrom(fruitExtra.campaignLevels[0]["level"],self)
+	print(Autoload.expressionToWin)
 	Autoload.state = "campaign"
 	Autoload.stateChange.emit()

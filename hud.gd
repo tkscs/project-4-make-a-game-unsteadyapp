@@ -6,7 +6,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if(Autoload.state == "playing" or Autoload.state == "campaign"):
 		$Score.text = "Score: " + str(Autoload.score)
-		$"Win condition".text ="Win condition: " + Autoload.expressionToWin
+		$"Win condition".text ="Win condition: " + str(Autoload.expressionToWin)
 
 
 func _on_back_pressed() -> void:

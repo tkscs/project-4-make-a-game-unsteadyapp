@@ -1,6 +1,8 @@
 class_name fruitExtra extends Node
 
-
+const campaignLevels = [
+	{"name":"Level 1","level":"""{"poly":[{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(1103.0, 430.0)","(559.0, 1100.0)","(569.0, 1109.0)","(1116.0, 439.0)"]},{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(561.0, 1094.0)","(23.0, 447.0)","(17.0, 453.0)","(552.0, 1116.0)"]}],"settings":{"expressionToWin":"score>100","gravity":2,"maxSpawnRate":0.4,"ogsize":1}}"""}
+	]
 
 #polygonIs.texture = 
 static func levelToSize(level:int):
@@ -38,11 +40,15 @@ static func loadFrom(textToAnalyse,ref):
 		for i in objFromUserString["poly"]:
 			print(i)
 			for j in range(i["polygon"].size()):
-				print(i["polygon"][j])
 				i["polygon"][j] = str_to_var("Vector2" + i["polygon"][j] + "")
 			allCollisionObj.append(fruitExtra.addNewPoly(i["polygon"],i["bounce"],i["friction"],i["collisionEvent"]))
 		for j in objFromUserString["settings"]:
-			ref.set("Autoload." + j, float(objFromUserString["settings"][j]))
+			if(j == "expressionToWin"):
+				Autoload.set(j, objFromUserString["settings"][j])
+			else:
+				print(j)
+				Autoload.set(j, float(objFromUserString["settings"][j]))
+			#ref.set("Autoload." + j, float(objFromUserString["settings"][j]))
 	return allCollisionObj
 static func createSaveString(allCollisionObj):
 	var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
