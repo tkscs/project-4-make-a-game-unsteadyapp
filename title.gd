@@ -8,17 +8,21 @@ func _ready() -> void:
 func stateChange():
 	if(Autoload.state == "main"):
 		show()
+	else:
+		hide()
 
 func _on_play_pressed() -> void:
 	Autoload.state = "playing"
 	Autoload.stateChange.emit()
-	hide()
 
 
 func _on_create_pressed() -> void:
 	Autoload.state = "create"
 	Autoload.stateChange.emit()
-	hide()
-
 func win():
 	$Win.text = "You Win!"
+
+
+func _on_campaign_pressed() -> void:
+	Autoload.state = "campaign"
+	Autoload.stateChange.emit()

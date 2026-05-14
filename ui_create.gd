@@ -19,11 +19,15 @@ var timerReset = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(Autoload.state == "create"):
+		if(drawing):
+			$"Cancel Polygon".show()
+		else:
+			$"Cancel Polygon".hide()
 		if(buttonIsPressed):
 				timerReset += delta
 				if(timerReset > 1):
 					timerReset = 0
-					for i in subElement(0,allCollisionObj):
+					for i in fruitExtra.subElement(0,allCollisionObj):
 						i.queue_free()
 					allCollisionObj = []
 		else:
@@ -44,11 +48,9 @@ func _process(delta: float) -> void:
 			if clickedOff:
 				$S/load.release_focus()
 				$S/WinCon.release_focus()
-				print("hello")
 
 func _on_button_pressed() -> void:
 	if(Autoload.state == "create"):
-		print("presssed")
 		if(drawing == false):
 			drawing = true
 			for i in $S.get_children():
@@ -80,6 +82,7 @@ func _draw() -> void:
 
 
 func _on_back_pressed() -> void:
+	cancelDrawing()
 	Autoload.state = "main"
 	Autoload.stateChange.emit()
 
@@ -112,18 +115,15 @@ func _on_reset_button_down() -> void:
 
 func _on_reset_button_up() -> void:
 	buttonIsPressed = false
-func subElement(index,arr):
-	var new = []
-	for i in arr:
-		new.append(i[index])
-	return new
+
 
 func _on_save_toggled(toggled_on: bool) -> void:
 	var childrenOf = $S/save.get_children()
 	var tocall
 	if(toggled_on):
-		var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
-		$S/save/saveText.text = JSON.stringify({"settings":worldSettings,"poly":subElement(1,allCollisionObj)})
+		#var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
+		#$S/save/saveText.text = JSON.stringify({"settings":worldSettings,"poly":subElement(1,allCollisionObj)})
+		$S/save/saveText.text = fruitExtra.createSaveString(allCollisionObj)
 		tocall = "show"
 	else:
 		tocall = "hide"
@@ -133,18 +133,8 @@ func _on_save_toggled(toggled_on: bool) -> void:
 func _on_load_pressed() -> void:
 	var textToAnalyse = $S/load.text 
 	if(textToAnalyse!= ""):
-		var objFromUserString = JSON.parse_string(textToAnalyse)
-		if(typeof(objFromUserString) == TYPE_DICTIONARY):
-			for i in objFromUserString["poly"]:
-				print(i)
-				for j in range(i["polygon"].size()):
-					print(i["polygon"][j])
-					i["polygon"][j] = str_to_var("Vector2" + i["polygon"][j] + "")
-				allCollisionObj.append(fruitExtra.addNewPoly(i["polygon"],i["bounce"],i["friction"],i["collisionEvent"]))
-			for j in objFromUserString["settings"]:
-				print(objFromUserString["settings"][j])
-				set("Autoload." + j, float(objFromUserString["settings"][j]))
-			print(Autoload.gravity)
+		allCollisionObj += fruitExtra.loadFrom(textToAnalyse,self)
+		print(Autoload.gravity)
 func _on_collision_item_selected(index: int) -> void:
 	eventColl = mapOf[index]
 
@@ -166,6 +156,8 @@ func _on_win_con_text_changed() -> void:
 
 
 func _on_cancel_polygon_pressed() -> void:
+	cancelDrawing()
+func cancelDrawing() -> void:
 	polygon = []
 	drawing = false
 	queue_redraw()

@@ -1,4 +1,8 @@
 class_name fruitExtra extends Node
+
+
+
+#polygonIs.texture = 
 static func levelToSize(level:int):
 	var size = Autoload.ogsize
 	for i in range(level):
@@ -22,6 +26,27 @@ static func permOfApolygon(polygon:PackedVector2Array):
 	for i in range(polygon.size()):
 		dist += polygon[i].distance_to(polygon[(i+1)%polygon.size()])
 	return dist
+static func subElement(index,arr):
+	var new = []
+	for i in arr:
+		new.append(i[index])
+	return new
+static func loadFrom(textToAnalyse,ref):
+	var objFromUserString = JSON.parse_string(textToAnalyse)
+	var allCollisionObj = []
+	if(typeof(objFromUserString) == TYPE_DICTIONARY):
+		for i in objFromUserString["poly"]:
+			print(i)
+			for j in range(i["polygon"].size()):
+				print(i["polygon"][j])
+				i["polygon"][j] = str_to_var("Vector2" + i["polygon"][j] + "")
+			allCollisionObj.append(fruitExtra.addNewPoly(i["polygon"],i["bounce"],i["friction"],i["collisionEvent"]))
+		for j in objFromUserString["settings"]:
+			ref.set("Autoload." + j, float(objFromUserString["settings"][j]))
+	return allCollisionObj
+static func createSaveString(allCollisionObj):
+	var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
+	return(JSON.stringify({"settings":worldSettings,"poly":subElement(1,allCollisionObj)}))
 static func areaOfAirregularPolygon(polygon) -> float:
 	var arrayOfTriIndices = Geometry2D.triangulate_polygon(polygon)
 	var triangeAreas = []
@@ -95,6 +120,10 @@ static func addNewPoly(polygon,bounce,friction,collisionEvent):
 			staticBody = preload("res://bouncepad.tscn").instantiate()
 			polygonIs = staticBody.get_child(1) as Polygon2D
 			staticBody.mode = "fan"
+			var image = load("res://fruits/fan.png")
+			#polygonIs.texture = ImageTexture.create_from_image(image)
+			polygonIs.uv = polygon # * Transform2D(Vector2(0.01,0),Vector2(0.01,0),Vector2(0,0))
+			print(polygonIs.uv)
 		else:
 			staticBody = preload("res://obstacle.tscn").instantiate()
 			polygonIs = staticBody.get_child(1) as Polygon2D

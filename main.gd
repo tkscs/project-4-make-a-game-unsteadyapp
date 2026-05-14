@@ -18,8 +18,7 @@ func _process(delta: float) -> void:
 func gameO():
 	Autoload.score = 0
 	get_tree().call_group("fruit","queue_free")
+	print("Game over")
 	Autoload.state = "main"
 	Autoload.stateChange.emit()
-	print("hello")
-
   

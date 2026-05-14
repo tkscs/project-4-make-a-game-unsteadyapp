@@ -9,14 +9,13 @@ var time = 0
 var bodiesTouching = null
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if(Autoload.state == "playing"):
+	if(Autoload.state == "playing" or Autoload.state == "campaign"):
 		var bodies  = get_overlapping_bodies()
 		if(bodies.size() >0):
 			#if(body in bodies):
 				time+=delta
 				if(time>2):
 					time = 0
-					print("hello")
 					Autoload.gameOver.emit()
 			#elif(bodiesTouching == []):
 				#bodiesTouching

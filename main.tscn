@@ -20,6 +20,7 @@ position = Vector2(-4, 446)
 position = Vector2(-10, 510)
 
 [node name="dropper" parent="." unique_id=1716786120 groups=["playing"] instance=ExtResource("3_h2yge")]
+position = Vector2(100, 0)
 
 [node name="HUD" parent="." unique_id=1704875551 groups=["playing"] instance=ExtResource("5_lquwl")]
 

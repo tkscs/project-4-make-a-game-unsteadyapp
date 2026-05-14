@@ -38,4 +38,15 @@ shortcut = SubResource("Shortcut_64ctp")
 text = "Back to Main (Esc)"
 metadata/_edit_use_anchors_ = true
 
+[node name="Win condition" type="Label" parent="." unique_id=1359363666]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 105.0
+offset_top = -23.0
+offset_right = 145.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "he"
+
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

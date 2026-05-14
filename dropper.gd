@@ -1,7 +1,8 @@
 extends Node2D
 
 var levelOfFruit = 0 
-# Called when the node enters the scene tree for the first time.
+var nextSize
+var baseY = 10
 func _ready() -> void:
 	nextSize = getnextfruit()
 	levelOfFruit = fruitExtra.resize(self,levelOfFruit,true)
@@ -16,16 +17,12 @@ func getnextfruit():
 	for i in randi_range(1,toTry):
 		futuresize = fruitExtra.sizeAlg(futuresize)
 	return floor(futuresize)
-var nextSize
-var baseY = 10
 func _input(event: InputEvent) -> void:
-	if(event.is_action("click") and Autoload.state == "playing" and event.pressed == false and Autoload.maxSpawnRate == 0):
-		print(event.to_string())
+	if(event.is_action("click") and (Autoload.state == "playing" or Autoload.state == "campaign") and event.pressed == false and Autoload.maxSpawnRate == 0):
 		spawnFruit()
-		print("spawn")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if(Autoload.state == "playing" ):
+	if(Autoload.state == "playing" or Autoload.state == "campaign"):
 		cooldown-=delta
 		var mousePos = get_global_mouse_position()
 		global_position = Vector2(float(mousePos[0]),10).clamp(Vector2(Autoload.clamps[0].x,baseY),Vector2(Autoload.clamps[1].x,baseY))
