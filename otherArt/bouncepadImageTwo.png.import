@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rrlvrurww18y"
-path="res://.godot/imported/fan.png-b1ef6587a363286ff9ed244c10758028.ctex"
+uid="uid://j8yreoms523l"
+path="res://.godot/imported/bouncepadImageTwo.png-f1b1c4ae34d6c0ea55396d7a9f638e01.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://fruits/fan.png"
-dest_files=["res://.godot/imported/fan.png-b1ef6587a363286ff9ed244c10758028.ctex"]
+source_file="res://otherArt/bouncepadImageTwo.png"
+dest_files=["res://.godot/imported/bouncepadImageTwo.png-f1b1c4ae34d6c0ea55396d7a9f638e01.ctex"]
 
 [params]
 

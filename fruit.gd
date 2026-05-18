@@ -42,8 +42,8 @@ func _on_body_entered(body: Node) -> void:
 	if(body.is_in_group("kill")):
 		Autoload.gameOver.emit()
 	elif(body.is_in_group("win")):
-		Autoload.gameOver.emit()
 		Autoload.win.emit()
+		Autoload.gameOver.emit()
 func checkWin(body):
 	var newExp = Expression.new()
 	newExp.parse(Autoload.expressionToWin,["score","fruitLevel"])
@@ -53,8 +53,9 @@ func checkWin(body):
 	else:
 		if(typeof(result) == TYPE_BOOL):
 			if(result):
-				Autoload.gameOver.emit()
 				Autoload.win.emit()
+				Autoload.gameOver.emit()
+				
 		else:
 			print("error")
 func checkForMerges(origin:Node,body: Node) -> void:

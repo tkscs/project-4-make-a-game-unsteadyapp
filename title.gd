@@ -21,10 +21,10 @@ func _on_create_pressed() -> void:
 	Autoload.stateChange.emit()
 func win():
 	$Win.text = "You Win!"
+	if(Autoload.state == "campaign"):
+		Autoload.campaginLevel += 1
 
 
 func _on_campaign_pressed() -> void:
-	fruitExtra.loadFrom(fruitExtra.campaignLevels[0]["level"],self)
-	print(Autoload.expressionToWin)
 	Autoload.state = "campaign"
 	Autoload.stateChange.emit()

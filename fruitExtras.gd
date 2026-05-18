@@ -1,22 +1,28 @@
 class_name fruitExtra extends Node
 
 const campaignLevels = [
-	{"name":"Level 1","level":"""{"poly":[{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(1103.0, 430.0)","(559.0, 1100.0)","(569.0, 1109.0)","(1116.0, 439.0)"]},{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(561.0, 1094.0)","(23.0, 447.0)","(17.0, 453.0)","(552.0, 1116.0)"]}],"settings":{"expressionToWin":"score>100","gravity":2,"maxSpawnRate":0.4,"ogsize":1}}"""}
-	]
+	{"name":"Level 1","level":"""{"poly":[{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(1103.0, 430.0)","(559.0, 1100.0)","(569.0, 1109.0)","(1116.0, 439.0)"]},{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(561.0, 1094.0)","(23.0, 447.0)","(17.0, 453.0)","(552.0, 1116.0)"]}],"settings":{"expressionToWin":"score>100","gravity":2,"maxSpawnRate":0.4,"ogsize":1}}"""},
+	#{"name":"Level 2","level":"""{"poly":[{"bounce":0.0,"collisionEvent":"winzone","friction":0.3,"polygon":["(994.0, 1008.0)","(1140.0, 991.0)","(1132.0, 1050.0)","(971.0, 1117.0)"]},{"bounce":0.0,"collisionEvent":"normal","friction":0.3,"polygon":["(1100.0, 995.0)","(639.0, 709.0)","(419.0, 519.0)","(407.0, 605.0)","(992.0, 986.0)"]},{"bounce":0.0,"collisionEvent":"normal","friction":0.3,"polygon":["(387.0, 1137.0)","(470.0, 1011.0)","(556.0, 1127.0)","(620.0, 1037.0)","(663.0, 1106.0)","(722.0, 1063.0)","(759.0, 1106.0)","(809.0, 1069.0)","(848.0, 1101.0)","(891.0, 1121.0)"]}],"settings":{"expressionToWin":"false","gravity":2,"maxSpawnRate":0.4,"ogsize":1}}"""},
+	{"name":"Level 2", "level":"""{"poly":[{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(406.0, 1131.0)","(492.0, 998.0)","(565.0, 1120.0)","(636.0, 1016.0)","(657.0, 1093.0)","(705.0, 1073.0)","(762.0, 1104.0)","(817.0, 1061.0)","(865.0, 1109.0)","(922.0, 1056.0)","(954.0, 1090.0)","(953.0, 1140.0)"]},{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(1123.0, 987.0)","(685.0, 701.0)","(1124.0, 826.0)"]},{"bounce":0.0,"collisionEvent":"winzone","friction":0.3,"polygon":["(1123.0, 1034.0)","(957.0, 1131.0)","(943.0, 1101.0)","(945.0, 1101.0)","(921.0, 1070.0)"]}],"settings":{"expressionToWin":"false","gravity":2,"maxSpawnRate":0.4,"ogsize":1}}"""},
+	{"name":"Spam", "level":""""poly":[{"bounce":0.0,"collisionEvent":null,"friction":0.3,"polygon":["(36.0, 1110.0)","(573.0, 467.0)","(579.0, 1114.0)"]}],"settings":{"expressionToWin":"score>5000","gravity":10.0,"maxSpawnRate":0.02,"ogsize":1.0}}]"""}]
 
 #polygonIs.texture = 
-static func levelToSize(level:int):
+##converts a fruit level to a size
+static func levelToSize(level:int) -> float:
 	var size = Autoload.ogsize
 	for i in range(level):
 		size = sizeAlg(size)
 	return size
+##Runs the current size algorithm
 static func sizeAlg(size:float) -> float:
 	return floor(size**1.02 + 1)
+##Loop through a packed vector2 array and offset it by a vector2
 static func offsetPackedVector2Array(arr:PackedVector2Array, offs: Vector2):
 	var newArr:PackedVector2Array = arr
-	for i in range(arr.size()):
+	for i in range(arr.size()): 
 		newArr[i] = arr[i] + offs
 	return newArr
+##checks a polygon's circle similairty
 static func similarityToCircle(polygon:PackedVector2Array):
 	var perim = permOfApolygon(polygon)
 	var area = areaOfAirregularPolygon(polygon)
@@ -28,32 +34,49 @@ static func permOfApolygon(polygon:PackedVector2Array):
 	for i in range(polygon.size()):
 		dist += polygon[i].distance_to(polygon[(i+1)%polygon.size()])
 	return dist
-static func subElement(index,arr):
+##return an array of all of the passed in array of index 
+static func subElement(index:int,arr:Array):
 	var new = []
 	for i in arr:
 		new.append(i[index])
 	return new
+##load from a string and return the collision objects
 static func loadFrom(textToAnalyse,ref):
-	var objFromUserString = JSON.parse_string(textToAnalyse)
-	var allCollisionObj = []
-	if(typeof(objFromUserString) == TYPE_DICTIONARY):
-		for i in objFromUserString["poly"]:
-			print(i)
-			for j in range(i["polygon"].size()):
-				i["polygon"][j] = str_to_var("Vector2" + i["polygon"][j] + "")
-			allCollisionObj.append(fruitExtra.addNewPoly(i["polygon"],i["bounce"],i["friction"],i["collisionEvent"]))
-		for j in objFromUserString["settings"]:
-			if(j == "expressionToWin"):
-				Autoload.set(j, objFromUserString["settings"][j])
-			else:
-				print(j)
-				Autoload.set(j, float(objFromUserString["settings"][j]))
-			#ref.set("Autoload." + j, float(objFromUserString["settings"][j]))
-	return allCollisionObj
+	if(textToAnalyse != ""):
+		var objFromUserString = JSON.parse_string(textToAnalyse)
+		var allCollisionObj = []
+		if(typeof(objFromUserString) == TYPE_DICTIONARY):
+			for i in objFromUserString["poly"]:
+				print(i)
+				for j in range(i["polygon"].size()):
+					i["polygon"][j] = str_to_var("Vector2" + i["polygon"][j] + "")
+				allCollisionObj.append(fruitExtra.addNewPoly(i["polygon"],i["bounce"],i["friction"],i["collisionEvent"]))
+			for j in objFromUserString["settings"]:
+				if(j == "expressionToWin"):
+					Autoload.set(j, objFromUserString["settings"][j])
+				else:
+					print(j)
+					Autoload.set(j, float(objFromUserString["settings"][j]))
+				#ref.set("Autoload." + j, float(objFromUserString["settings"][j]))
+		return allCollisionObj
+	return []
 static func createSaveString(allCollisionObj):
+	"""takes a list of all collision objects"""
 	var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
-	return(JSON.stringify({"settings":worldSettings,"poly":subElement(1,allCollisionObj)}))
+	var poly = subElement(1,allCollisionObj).duplicate(true)
+	#var endingPolys = []
+	var polyref = subElement(0,allCollisionObj).duplicate(true)
+	for i in range(polyref.size()):
+		print(polyref[i])
+		print(poly[i]["polygon"])
+		var h = Array(offsetPackedVector2Array(poly[i]["polygon"],Vector2(polyref[i].global_position)))
+		print(h,poly[i]["polygon"])
+		poly[i]["polygon"] = h
+		print(poly[i]["polygon"])
+	return(JSON.stringify({"settings":worldSettings,"poly":poly}))
 static func areaOfAirregularPolygon(polygon) -> float:
+	"""Calculate the area of a irregular polygon
+	polygon: takes a polygon"""
 	var arrayOfTriIndices = Geometry2D.triangulate_polygon(polygon)
 	var triangeAreas = []
 	var totalArea = 0
@@ -72,7 +95,8 @@ static func areaOfAirregularPolygon(polygon) -> float:
 		totalArea += sumed
 		triangeAreas.append(sumed)
 	return totalArea
-static func resize(body,level:int,onlyVisual:bool = false):
+##resize a body and children based on fruit level
+static func resize(body,level:int,onlyVisual:bool = false) -> int:
 	var visual = body.get_child(0) as Sprite2D
 	var scaleTo = levelToSize(level)
 	visual.scale = Vector2(0.187*floor(scaleTo),0.187*floor(scaleTo))
@@ -114,24 +138,28 @@ static func resize(body,level:int,onlyVisual:bool = false):
 			collisionRef.global_scale = childref.global_scale
 		#$Polygon2D.polygon = Geometry2D.merge_polygons(bm.opaque_to_polygons(Rect2(Vector2.ZERO,bm.get_size())))
 	return level + 1
-# Called when the node enters the scene tree for the first time.
+##makes a new polygon and return a array with a refrence and then a dictionary containing stats
 static func addNewPoly(polygon,bounce,friction,collisionEvent):
 	if(polygon.size() > 1):
 		var staticBody
 		var polygonIs
+		#bouncepad
 		if(collisionEvent == "bp"):
 			staticBody = preload("res://bouncepad.tscn").instantiate()
 			polygonIs = staticBody.get_child(1) as Polygon2D
+			var image = preload("res://otherArt/bouncepadImageTwo.png")
+			polygonIs.texture = image
 		elif(collisionEvent == "fan"):
 			staticBody = preload("res://bouncepad.tscn").instantiate()
 			polygonIs = staticBody.get_child(1) as Polygon2D
 			staticBody.mode = "fan"
-			var image = load("res://fruits/fan.png")
+			var image = preload("res://otherArt/fan.png")
+			polygonIs.texture = image
 			#polygonIs.texture = ImageTexture.create_from_image(image)
 			polygonIs.uv = polygon # * Transform2D(Vector2(0.01,0),Vector2(0.01,0),Vector2(0,0))
 			print(polygonIs.uv)
 		else:
-			staticBody = preload("res://obstacle.tscn").instantiate()
+			staticBody = preload("res://obstacle.tscn").instantiate() as obstacle
 			polygonIs = staticBody.get_child(1) as Polygon2D
 			var line = polygonIs.get_child(0) as Line2D
 			line.modulate = Color.from_hsv(bounce,friction,1)
@@ -153,7 +181,8 @@ static func addNewPoly(polygon,bounce,friction,collisionEvent):
 		collisionShape.polygon = polygon
 		Autoload.spawn.emit(staticBody)
 		return [staticBody,{"polygon":polygon,"bounce":bounce,"friction":friction,"collisionEvent":collisionEvent}]
-static func isSimple(polygon):
+static func isSimple(polygon) -> bool:
+	"""check if a polygon intersects itself and return a boolean"""
 	for i in range(polygon.size()-1):
 		var p1 = polygon[i%polygon.size()]
 		var p2 = polygon[(i+1)%polygon.size()]

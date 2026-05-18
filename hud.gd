@@ -10,6 +10,8 @@ func _process(delta: float) -> void:
 
 
 func _on_back_pressed() -> void:
+	if(Autoload.state == "create"):
+		Autoload.levelInDevelopment = fruitExtra.createSaveString(Autoload.allCollisionObj)
 	Autoload.state = "main"
 	Autoload.gameOver.emit()
 	Autoload.stateChange.emit()

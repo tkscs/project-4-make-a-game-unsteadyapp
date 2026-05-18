@@ -1,25 +1,36 @@
 extends Node2D
-var allCollisionObj = []
+#var allCollisionObj = []
 var allData = {}
-var drawing = false
 var polygon = []
+const radiusOf = 10
 var eventColl
 const mapOf = ["normal","killzone","bp","fan","winzone"]
 var buttonIsPressed = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoload.stateChange.connect(stateChange)
-
 func stateChange():
 	if(Autoload.state == "create"):
 		show()
 	else:
+		if(Autoload.state == "campaign"):
+			Autoload.levelInDevelopment = fruitExtra.createSaveString(Autoload.allCollisionObj)
+			resetAllPoly()
+			
+			Autoload.allCollisionObj = fruitExtra.loadFrom(fruitExtra.campaignLevels[min(fruitExtra.campaignLevels.size()-1,Autoload.campaginLevel)]["level"],self)
+		else:
+			resetAllPoly()
+			Autoload.allCollisionObj = fruitExtra.loadFrom(Autoload.levelInDevelopment,self)
 		hide()
 var timerReset = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+func resetAllPoly() -> void:
+	for i in fruitExtra.subElement(0,Autoload.allCollisionObj):
+		i.queue_free()
+	Autoload.allCollisionObj = []
 func _process(delta: float) -> void:
 	if(Autoload.state == "create"):
-		if(drawing):
+		if(Autoload.drawing):
 			$"Cancel Polygon".show()
 		else:
 			$"Cancel Polygon".hide()
@@ -27,17 +38,20 @@ func _process(delta: float) -> void:
 				timerReset += delta
 				if(timerReset > 1):
 					timerReset = 0
-					for i in fruitExtra.subElement(0,allCollisionObj):
-						i.queue_free()
-					allCollisionObj = []
+					resetAllPoly()
 		else:
 			timerReset  = 0
 		if(Input.is_action_just_pressed("click")):
-			if(drawing):
+			if(Autoload.drawing):
 				var mousePos = get_viewport().get_mouse_position()
-				polygon.append(mousePos)
-				queue_redraw()
-				print(mousePos)
+				if(polygon.size() < 1):
+					polygon.append(mousePos)
+					queue_redraw()
+				elif(mousePos.distance_to(polygon[0])>radiusOf):
+					polygon.append(mousePos)
+					queue_redraw()
+				else:
+					_on_button_pressed()
 		if(Input.is_action_just_pressed("clickActual")):
 			var listOfRefToCLickables = [$S/load,$S/WinCon]
 			var clickedOff = true
@@ -48,11 +62,11 @@ func _process(delta: float) -> void:
 			if clickedOff:
 				$S/load.release_focus()
 				$S/WinCon.release_focus()
-
+#TODO: GLobal Values don't match with Sliders 
 func _on_button_pressed() -> void:
 	if(Autoload.state == "create"):
-		if(drawing == false):
-			drawing = true
+		if(Autoload.drawing == false):
+			Autoload.drawing = true
 			for i in $S.get_children():
 				if("disable" in i):
 					i.disable = true
@@ -60,25 +74,29 @@ func _on_button_pressed() -> void:
 			polygon = []
 		else:
 			if(polygon.size() > 2):
-				drawing = false
-				allCollisionObj.append(fruitExtra.addNewPoly(polygon,$S/Bounce.value,$S/Friction.value,eventColl))
+				Autoload.drawing = false
+				Autoload.allCollisionObj.append(fruitExtra.addNewPoly(polygon,$S/Bounce.value,$S/Friction.value,eventColl))
 			print(fruitExtra.isSimple(polygon))
 			for i in $S.get_children():
 				if("disable" in i):
 					i.disable = false
 			$S.show()
 			polygon = []
+			Autoload.levelInDevelopment = fruitExtra.createSaveString(Autoload.allCollisionObj)
 			queue_redraw()
 			#queue_redraw()
 func _draw() -> void:
 	var color =Color(0.468, 0.583, 0.899, 1.0)
 	var size= polygon.size()
+	if(polygon.size() > 0):
+		draw_circle(polygon[0],radiusOf,Color(0.5,0.5,0.5,0.5),true)
 	if(size== 1):
 		draw_circle(polygon[0],2,color)
 	elif(size == 2):
 		draw_line(polygon[0],polygon[1],color)
 	elif(size > 2):
 		draw_polyline(polygon,color)
+		
 
 
 func _on_back_pressed() -> void:
@@ -92,7 +110,6 @@ func _on_settings_pressed() -> void:
 		$S.show()
 	else:
 		$S.hide()
-
 
 
 
@@ -121,9 +138,10 @@ func _on_save_toggled(toggled_on: bool) -> void:
 	var childrenOf = $S/save.get_children()
 	var tocall
 	if(toggled_on):
+		
 		#var worldSettings = {"gravity":Autoload.gravity,"expressionToWin":Autoload.expressionToWin,"ogsize":Autoload.ogsize,"maxSpawnRate":Autoload.maxSpawnRate}
 		#$S/save/saveText.text = JSON.stringify({"settings":worldSettings,"poly":subElement(1,allCollisionObj)})
-		$S/save/saveText.text = fruitExtra.createSaveString(allCollisionObj)
+		$S/save/saveText.text = fruitExtra.createSaveString(Autoload.allCollisionObj)
 		tocall = "show"
 	else:
 		tocall = "hide"
@@ -133,8 +151,8 @@ func _on_save_toggled(toggled_on: bool) -> void:
 func _on_load_pressed() -> void:
 	var textToAnalyse = $S/load.text 
 	if(textToAnalyse!= ""):
-		allCollisionObj += fruitExtra.loadFrom(textToAnalyse,self)
-		print(Autoload.gravity)
+		Autoload.allCollisionObj += fruitExtra.loadFrom(textToAnalyse,self)
+
 func _on_collision_item_selected(index: int) -> void:
 	eventColl = mapOf[index]
 
@@ -154,10 +172,15 @@ func _on_win_con_text_changed() -> void:
 		else:
 			$S/WinCon/label.text = "Error"
 
-
 func _on_cancel_polygon_pressed() -> void:
 	cancelDrawing()
 func cancelDrawing() -> void:
 	polygon = []
-	drawing = false
+	Autoload.drawing = false
 	queue_redraw()
+	for i in $S.get_children():
+		if("disable" in i):
+			i.disable = false
+		$S.show()
+		polygon = []
+		queue_redraw()
